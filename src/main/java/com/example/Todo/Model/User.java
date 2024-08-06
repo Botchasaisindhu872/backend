@@ -1,7 +1,6 @@
-package com.example.Todo.model;
+package com.example.Todo.Model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -11,8 +10,6 @@ public class User {
     private Long userId;
     private String userName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Category> categories;
 
     // Constructors, getters, and setters
     public User() {}
@@ -38,11 +35,4 @@ public class User {
         this.userName = userName;
     }
 
-    public List<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 }

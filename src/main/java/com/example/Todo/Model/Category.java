@@ -1,7 +1,6 @@
-package com.example.Todo.model;
+package com.example.Todo.Model;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -10,21 +9,15 @@ public class Category  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="category_id")
     private Long categoryId;
+    @Column(name = "category_name")
     private String categoryName;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> subTasks;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
 
     // Constructors, getters, and setters
     public Category() {}
 
-    public Category(Long categoryId, String categoryName) {
-        this.categoryId = categoryId;
+    public Category(String categoryName) {
         this.categoryName = categoryName;
     }
 
@@ -42,21 +35,5 @@ public class Category  {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-    }
-
-    public List<Task> getSubTasks() {
-        return subTasks;
-    }
-
-    public void setSubTasks(List<Task> subTasks) {
-        this.subTasks = subTasks;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

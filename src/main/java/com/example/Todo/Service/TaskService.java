@@ -2,11 +2,13 @@ package com.example.Todo.Service;
 
 import com.example.Todo.DTO.requestDto.TaskRequestDTO;
 import com.example.Todo.DTO.responseDto.TaskResponseDTO;
-import com.example.Todo.DTOmapper.request.TaskRequestMapper;
-import com.example.Todo.DTOmapper.response.TaskResponseMapper;
+import com.example.Todo.DTO.DTOmapper.request.TaskRequestMapper;
+import com.example.Todo.DTO.DTOmapper.response.TaskResponseMapper;
+import com.example.Todo.Exceptions.TaskException;
 import com.example.Todo.Repositories.read.TaskReadRepository;
 import com.example.Todo.Repositories.write.TaskWriteRepository;
 import com.example.Todo.Model.Task;
+import com.example.Todo.Validations.TaskValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,24 +22,40 @@ public class TaskService {
     private  TaskReadRepository taskReadRepo;
     @Autowired
     private  TaskWriteRepository taskWriteRepo;
-    public TaskResponseDTO addParentTask(Long u_id, Long c_id, TaskRequestDTO taskDTO){
+    public  TaskResponseDTO addParentTask(Long u_id, Long c_id, TaskRequestDTO taskDTO){
 
-
-       Task task= TaskRequestMapper.dTOToTask(taskDTO);
+        TaskValidations.validateTask(taskDTO);
+        Task task= TaskRequestMapper.dTOToTask(taskDTO);
         task.setUserId(u_id);
         task.setParentTaskId(task.getTaskId());
         task.setCategoryId(c_id);
-       return TaskResponseMapper.taskToDTO(taskWriteRepo.save(task));
+        try {
+            taskWriteRepo.save(task);
+        }
+
+        catch(Exception e){
+            throw new TaskException("Could not create parent task",e);
+        }
+       return TaskResponseMapper.taskToDTO(task);
 
     }
     public  TaskResponseDTO addSubTask(Long u_id, Long c_id,  Long p_id,  TaskRequestDTO taskDTO){
+        TaskValidations.validateTask(taskDTO);
         Task task= TaskRequestMapper.dTOToTask(taskDTO);
         task.setUserId(u_id);
         task.setParentTaskId(p_id);
         task.setCategoryId(c_id);
-        return TaskResponseMapper.taskToDTO(taskWriteRepo.save(task));
+        try {
+            taskWriteRepo.save(task);
+        }
+        catch(Exception e){
+            throw new TaskException("Could not create sub task",e);
+        }
+
+        return TaskResponseMapper.taskToDTO(task);
     }
     public  TaskResponseDTO updateTaskById(Long u_id, Long c_id,  Long id,  TaskRequestDTO newTask){
+        TaskValidations.validateTask(newTask);
         Optional<Task> oldTaskOpt= taskReadRepo.findById(id);
         Task oldTask;
         if(oldTaskOpt.isPresent()){
@@ -45,13 +63,19 @@ public class TaskService {
             oldTask.setTaskTitle(newTask.getTaskTitle());
             oldTask.setTaskDescription(newTask.getTaskDescription());
             oldTask.setDeadline(newTask.getDeadline());
-            return  TaskResponseMapper.taskToDTO(taskWriteRepo.save(oldTask));
+            try{
+                taskWriteRepo.save(oldTask);
+            }
+            catch(Exception e ){
+                throw new TaskException("Could not update task",e);
+            }
+            return  TaskResponseMapper.taskToDTO(oldTask);
 
         }
 
 
 
-        return  new TaskResponseDTO();
+        throw new TaskException("Could not find task");
 
 
     }
@@ -96,7 +120,8 @@ public class TaskService {
 
             return TaskResponseMapper.taskToDTO(task);
         }
-        return new TaskResponseDTO();
+        throw new TaskException("Could not find task");
+
     }
 
 
@@ -108,11 +133,15 @@ public class TaskService {
 
         if(optTaskObject.isPresent()) {
             Task task = optTaskObject.get();
-            taskWriteRepo.deleteById(t_id);
-
+            try {
+                taskWriteRepo.deleteById(t_id);
+            }
+            catch (Exception e){
+                throw new TaskException("Could not delete task",e);
+            }
             return TaskResponseMapper.taskToDTO(task);
         }
-        return new TaskResponseDTO();
+        throw new TaskException("Could not find task");
     }
 
 

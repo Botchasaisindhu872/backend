@@ -1,12 +1,17 @@
 package com.example.Todo.DTO.requestDto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+
 @Component
 public class TaskRequestDTO {
     private String taskTitle;
+    private String taskDescription;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date deadline;
 
     public TaskRequestDTO() {
     }
@@ -17,9 +22,6 @@ public class TaskRequestDTO {
         this.deadline = deadline;
     }
 
-    private String taskDescription;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date deadline;
 
     public String getTaskTitle() {
         return taskTitle;

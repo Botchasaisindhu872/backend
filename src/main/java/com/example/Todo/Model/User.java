@@ -1,5 +1,6 @@
 package com.example.Todo.Model;
-
+//import javax.validation.constraints.NotEmpty;
+//import javax.validation.constraints.Size;
 import jakarta.persistence.*;
 
 @Entity
@@ -7,7 +8,10 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="user_id")
     private Long userId;
+   // @Size(min = 2, max = 255, message = "Name must be between 2 and 50 characters")
+    @Column(name="user_name")
     private String userName;
 
 

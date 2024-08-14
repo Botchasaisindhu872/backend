@@ -1,4 +1,4 @@
-package com.example.Todo.DTOmapper.response;
+package com.example.Todo.DTO.DTOmapper.response;
 
 import com.example.Todo.DTO.responseDto.CategoryResponseDTO;
 import com.example.Todo.Model.Category;

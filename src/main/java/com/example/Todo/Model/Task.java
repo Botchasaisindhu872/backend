@@ -10,7 +10,6 @@ import java.util.Date;
 public class Task  {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
     @Column(name="task_id")
     private Long taskId;
 

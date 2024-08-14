@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:3000")
 
 @RestController
 @RequestMapping("/categories")
@@ -21,6 +22,9 @@ public class CategoryController {
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
 
         List<CategoryResponseDTO> categoryDTOList = categoryService.getAllCategories();
+        if(categoryDTOList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return  new ResponseEntity<>(categoryDTOList, HttpStatus.OK);
 
 

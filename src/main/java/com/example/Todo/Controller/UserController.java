@@ -5,11 +5,13 @@ import com.example.Todo.DTO.responseDto.UserResponseDTO;
 import com.example.Todo.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import java.util.Optional;
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/users")
 
@@ -22,7 +24,9 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
 
         List<UserResponseDTO> userDTOList = userService.getAllUsers();
-
+        if(userDTOList.isEmpty()){
+         return new ResponseEntity<>(userDTOList,HttpStatus.NO_CONTENT);
+        }
         return  new ResponseEntity<>(userDTOList, HttpStatus.OK);
 
 
@@ -33,15 +37,17 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUsersByID(@PathVariable Long id){
             UserResponseDTO userDTO = userService.getUserByID(id);
 
-
             return  new ResponseEntity<>(userDTO, HttpStatus.OK);
 
     }
 
     //Post Mappings
     @PostMapping
-    public UserResponseDTO addUser(@RequestBody UserRequestDTO userDTO){
-           return userService.addUser(userDTO);
+    public ResponseEntity<UserResponseDTO >addUser(@RequestBody UserRequestDTO userDTO){
+        UserResponseDTO userResponseDTO = userService.addUser(userDTO);
+        return new ResponseEntity<>(userResponseDTO,HttpStatus.OK);
+
+
 
     }
 

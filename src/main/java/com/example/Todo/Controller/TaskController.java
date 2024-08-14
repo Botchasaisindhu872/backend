@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -22,12 +22,16 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDTO>> getParentTasks(@RequestParam Long u_id, @RequestParam Long c_id){
 
         List<TaskResponseDTO> taskDTOList = taskService.getParentTasks(u_id,c_id);
+        if(taskDTOList.isEmpty())
+        {
+            return  new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
         return  new ResponseEntity<>(taskDTOList, HttpStatus.OK);
 
 
     }
     @GetMapping("/{t_id}")
-    public ResponseEntity<TaskResponseDTO> getParentTaskById(@RequestParam Long t_id){
+    public ResponseEntity<TaskResponseDTO> getParentTaskById(@PathVariable Long t_id){
 
 
         TaskResponseDTO taskDTO= taskService.getTaskById(t_id);
@@ -38,8 +42,12 @@ public class TaskController {
     @GetMapping("/{t_id}/subtasks")
     public ResponseEntity<List<TaskResponseDTO>> getSubTasks(@PathVariable Long t_id){
 
-        List<TaskResponseDTO> subTaskListDTO= taskService.getAllSubTasks(t_id);
-        return  new ResponseEntity<>(subTaskListDTO, HttpStatus.OK);
+        List<TaskResponseDTO> subTaskDTOList= taskService.getAllSubTasks(t_id);
+        if(subTaskDTOList.isEmpty())
+        {
+            return  new ResponseEntity<>( HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>(subTaskDTOList, HttpStatus.OK);
 
 
     }

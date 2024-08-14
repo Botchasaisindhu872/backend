@@ -1,4 +1,4 @@
-package com.example.Todo.DTOmapper.request;
+package com.example.Todo.DTO.DTOmapper.request;
 
 import com.example.Todo.DTO.requestDto.TaskRequestDTO;
 import com.example.Todo.Model.Task;

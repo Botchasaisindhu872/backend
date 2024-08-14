@@ -1,12 +1,14 @@
 package com.example.Todo.Service;
 
-import com.example.Todo.DTOmapper.request.UserRequestMapper;
-import com.example.Todo.DTOmapper.response.UserResponseMapper;
+import com.example.Todo.DTO.DTOmapper.request.UserRequestMapper;
+import com.example.Todo.DTO.DTOmapper.response.UserResponseMapper;
 import com.example.Todo.DTO.requestDto.UserRequestDTO;
 import com.example.Todo.DTO.responseDto.UserResponseDTO;
+import com.example.Todo.Exceptions.UserException;
 import com.example.Todo.Repositories.read.UserReadRepository;
 import com.example.Todo.Repositories.write.UserWriteRepository;
 import com.example.Todo.Model.User;
+import com.example.Todo.Validations.UserValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,24 +25,46 @@ public class UserService {
 
 
     public UserResponseDTO addUser(UserRequestDTO userDTO) {
+            UserValidations.validateUser(userDTO);
             User user = UserRequestMapper.dTOToUser(userDTO);
-            userWriteRepo.save(user);
+            try {
+
+                user =userWriteRepo.save(user);
+                if(user==null){
+                    throw new UserException("Could not  be able to create user");
+
+                }
+
+                return UserResponseMapper.userToDTO(user);
+            }
+            catch (Exception e){
+                throw new UserException("Could not be  able to create user",e);
+            }
 
 
-            return UserResponseMapper.userToDTO(user);
     }
 
 
    public UserResponseDTO updateUserByID(Long id,UserRequestDTO newUser) {
+       UserValidations.validateUser(newUser);
         Optional<User> oldUserOpt= userReadRepo.findById(id);
 
         if(oldUserOpt.isPresent()){
             User oldUser=oldUserOpt.get();
             oldUser.setUserName(newUser.getUserName());
-            userWriteRepo.save(oldUser);
+            try {
+                userWriteRepo.save(oldUser);
+            }
+            catch (Exception e){
+                throw new UserException("Could not be  able to update user details",e);
+            }
             return UserResponseMapper.userToDTO(oldUser);
         }
-        return null;
+
+            throw new UserException("User could not be found");
+
+
+
 
     }
     public  List<UserResponseDTO> getAllUsers(){
@@ -59,7 +83,8 @@ public class UserService {
             UserResponseDTO userDTO=UserResponseMapper.userToDTO(user);
             return userDTO;
         }
-        return new UserResponseDTO();
+        throw new UserException("User could not be found");
+
     }
 
     public  UserResponseDTO deleteUser(Long id){
@@ -67,10 +92,15 @@ public class UserService {
 
         if(optUserObject.isPresent()) {
             User user = optUserObject.get();
-            userWriteRepo.deleteById(id);
+            try {
+                userWriteRepo.deleteById(id);
+            }
+            catch(Exception e){
+                throw new UserException("Could not delete user",e);
+            }
             return UserResponseMapper.userToDTO(user);
         }
-        return new UserResponseDTO();
+        throw new UserException("User could not be found");
     }
 
 }

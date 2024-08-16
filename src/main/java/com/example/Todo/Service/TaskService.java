@@ -23,7 +23,6 @@ public class TaskService {
     @Autowired
     private  TaskWriteRepository taskWriteRepo;
     public  TaskResponseDTO addParentTask(Long u_id, Long c_id, TaskRequestDTO taskDTO){
-
         TaskValidations.validateTask(taskDTO);
         Task task= TaskRequestMapper.dTOToTask(taskDTO);
         task.setUserId(u_id);

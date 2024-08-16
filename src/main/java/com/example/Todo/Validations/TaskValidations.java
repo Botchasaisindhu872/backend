@@ -35,6 +35,7 @@ public class TaskValidations {
         }
         String deadlineString;
         try {
+            System.out.println("HIII");
             Date deadline = taskReqDTO.getDeadline();
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             formatter.setLenient(false);

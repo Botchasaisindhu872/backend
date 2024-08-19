@@ -1,10 +1,12 @@
 package com.example.Todo.Exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +19,12 @@ public class GlobalExceptionHandler {
        response.put("error", ex.getMessage());
        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
    }
+    @ExceptionHandler({InvalidFormatException.class, DateTimeParseException.class})
+    public  ResponseEntity<Map<String, String>>  handleInvalidDateFormat(Exception ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("error","Invalid date format. Please use the format dd-MM-yyyy." );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(CategoryException.class)
     public ResponseEntity<Map<String, String>> handleCategoryException(CategoryException ex) {
 

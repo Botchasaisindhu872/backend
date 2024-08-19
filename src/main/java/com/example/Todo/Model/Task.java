@@ -3,6 +3,7 @@ package com.example.Todo.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,7 +20,7 @@ public class Task  {
     private String taskDescription;
     @Column(name="task_deadline")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date deadline;
+    private LocalDate deadline;
 
     @Column(name="user_id")
     private Long userId;
@@ -31,7 +32,7 @@ public class Task  {
     public Task() {
     }
 
-    public Task(Long taskId, String taskTitle, String taskDescription, Date deadline, Long userId, Long parentTaskId, Long categoryId) {
+    public Task(Long taskId, String taskTitle, String taskDescription, LocalDate deadline, Long userId, Long parentTaskId, Long categoryId) {
         this.taskId = taskId;
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
@@ -65,11 +66,11 @@ public class Task  {
         this.taskDescription = taskDescription;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 

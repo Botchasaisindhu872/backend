@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class TaskResponseDTO {
@@ -24,7 +25,7 @@ public class TaskResponseDTO {
 
     private String taskDescription;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date deadline;
+    private LocalDate deadline;
 
     public String getTaskTitle() {
         return taskTitle;
@@ -42,11 +43,11 @@ public class TaskResponseDTO {
         this.taskDescription = taskDescription;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 }

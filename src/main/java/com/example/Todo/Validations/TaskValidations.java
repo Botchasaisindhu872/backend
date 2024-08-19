@@ -7,6 +7,7 @@ import com.example.Todo.Exceptions.UserException;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,22 +26,22 @@ public class TaskValidations {
         }
 
         if (!matcher.matches()) {
-            throw new TaskException("Enter a valid TITLE  . TITLE should start with a alphabet");
+            throw new TaskException("Enter a valid title which should start with a alphabet ");
         }
         String titleDesc = taskReqDTO.getTaskDescription();
 
 
         if(titleDesc.length()>500 || titleDesc.length()<2){
-            throw new TaskException("Task Description Length should be between 2 and 255");
+            throw new TaskException("Task description length should be between 2 and 255");
         }
         String deadlineString;
         try {
             System.out.println("HIII");
-            Date deadline = taskReqDTO.getDeadline();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            formatter.setLenient(false);
-            deadlineString = formatter.format(deadline);
-            System.out.print(deadlineString);
+            LocalDate deadline = taskReqDTO.getDeadline();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            deadlineString = deadline.format(formatter);
+            //System.out.println(deadlineString);
+            //System.out.print(deadlineString);
         }
         catch(Exception e){
             throw new TaskException("Enter a valid deadline date.");

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Component
@@ -11,12 +12,12 @@ public class TaskRequestDTO {
     private String taskTitle;
     private String taskDescription;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date deadline;
+    private LocalDate deadline;
 
     public TaskRequestDTO() {
     }
 
-    public TaskRequestDTO(String taskTitle, String taskDescription, Date deadline) {
+    public TaskRequestDTO(String taskTitle, String taskDescription, LocalDate deadline) {
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
         this.deadline = deadline;
@@ -39,11 +40,11 @@ public class TaskRequestDTO {
         this.taskDescription = taskDescription;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 }
